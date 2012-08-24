@@ -1,8 +1,8 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="hero-unit">
-  <h1>Reserve Your Court</h1>
-  <p>Tennis Reservations allows you to reserve your favorite tennis court online or on your mobile phone. You can sign up for tournaments, games with your friends, blah, blah.</p>
-  <p><a class="btn btn-primary btn-large">Find Your Court &raquo;</a></p>
+  <h1>Tennis Reservations</h1>
+  <p>Blabbity, blabbity, blabbity, blah. Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.</p>
+  <p><a class="btn btn-primary btn-large">Sign Up, MF!&raquo;</a></p>
 </div>
 
 <!-- Example row of columns -->
