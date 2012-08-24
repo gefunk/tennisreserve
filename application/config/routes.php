@@ -38,10 +38,11 @@
 |
 */
 
-$route['default_controller'] = "main";
+$route['default_controller'] = "main/view";
 // $route['404_override'] = '';
-$route['contact'] = "main/contact";
-$route['about'] = "main/about";
+$route['home'] = "main/view";
+$route['contact'] = "main/view/contact";
+$route['about'] = "main/view/about";
 $route['terms'] = "main/terms";
 $route['signup'] = "main/signup";
 $route['confirm/(:any)'] = "navi/confirm";
