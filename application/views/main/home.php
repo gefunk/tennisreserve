@@ -2,7 +2,7 @@
 <div class="hero-unit">
   <h1>Tennis Reservations</h1>
   <p>Blabbity, blabbity, blabbity, blah. Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.</p>
-  <p><a class="btn btn-primary btn-large">Sign Up, MF!&raquo;</a></p>
+  <p><a class="btn btn-primary btn-large" href="<?php echo site_url('facility/signup'); ?>">Sign Up, MF!&raquo;</a></p>
 </div>
 
 <!-- Example row of columns -->
