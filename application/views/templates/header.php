@@ -40,12 +40,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="<?php echo base_url();?>home">Tennis Reservations</a>
+          <a class="brand" href="<?php echo site_url('home');?>">Tennis Reservations</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="<?php echo base_url();?>home">Home</a></li>
-              <li><a href="<?php echo base_url();?>about">About</a></li>
-             <li><a href="<?php echo base_url();?>contact">Contact</a></li>
+              <li class="active"><a href="<?php echo site_url('home');?>">Home</a></li>
+              <li><a href="<?php echo site_url('about');?>">About</a></li>
+             <li><a href="<?php echo site_url('contact');?>">Contact</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                 <ul class="dropdown-menu">

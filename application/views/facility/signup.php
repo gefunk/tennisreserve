@@ -1,4 +1,4 @@
-<form action="signup_submit" method="get" class="form-horizontal" accept-charset="utf-8">
+<form action="<?php echo site_url('facility/add'); ?>" method="post" class="form-horizontal" accept-charset="utf-8">
 	<fieldset>
 		<legend>Enter Facility Information</legend>
 		<div class="control-group">
@@ -19,7 +19,7 @@
 			<label class="control-label" for="url">Your Save Court URL</label>
 			<div class="controls">
 				<div class="input-append">
-					<input type="text" id="url" placeholder="Your Save Court URL">
+					<input type="text" id="url" name="url" placeholder="Your Save Court URL">
 					<span class="add-on">.savecourt.com</span>
 				</div>
 			</div>
@@ -27,13 +27,13 @@
 		<div class="control-group">
 			<label class="control-label" for="hard_courts">Hard Courts</label>
 			<div class="controls">
-				<input type="text" id="hard_courts" placeholder="e.g. 5">
+				<input type="text" id="hard_courts" name="hard_courts" placeholder="e.g. 5">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="clay_courts">Clay Courts</label>
 			<div class="controls">
-				<input type="text" id="clay_courts" placeholder="e.g. 1">
+				<input type="text" id="clay_courts" name="clay_courts" placeholder="e.g. 1">
 			</div>
 		</div>
 		
