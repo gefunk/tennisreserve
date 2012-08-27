@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+	<script src="<?php echo base_url();?>assets/js/jquery.js"></script>
     <!-- Le styles -->
     <link href="<?php echo base_url();?>assets/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">

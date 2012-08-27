@@ -1,3 +1,12 @@
+<script language="javascript">
+	$(document).ready(function(){
+		console.log("jquery document ready");
+		$("#cancel").click(function(e){
+			console.log("I was fired ");
+			window.location = "<?php echo base_url(); ?>";
+		});
+	});
+</script>
 <form action="<?php echo site_url('facility/add'); ?>" method="post" class="form-horizontal" accept-charset="utf-8">
 	<fieldset>
 		<legend>Enter Facility Information</legend>
@@ -40,7 +49,7 @@
 		
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary">Create</button>
-			<button class="btn">Cancel</button>
+			<button id="cancel" class="btn">Cancel</button>
 	    </div>
 	</fieldset>
 
