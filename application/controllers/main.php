@@ -8,6 +8,11 @@ class Main extends CI_Controller {
 	
 	}
 	
+	function index($page='')
+	{
+				
+	}
+	
 	public function view($page = 'home')
 	{
 
