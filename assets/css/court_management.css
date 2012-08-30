@@ -1,0 +1,34 @@
+.court-text{
+    margin-left: 5px;
+}
+
+#calendar-container{
+    width: 65%;
+    height: 450px;
+    overflow: auto;
+    padding-right: 5px;
+}
+
+#calendar-title{
+
+}
+
+table#calendar tr > td:last-child {
+    cursor: pointer;
+
+}
+
+table#calendar tr > td:first-child {
+    width: 15%;
+    text-align: right;
+    color: #c1c1c1;
+}
+
+table#calendar tr:nth-child(2n+1) > td:first-child{
+    color: #a4a4a4;
+}
+
+table#calendar tr:nth-child(2n+3) > td {
+    border-top: 2px solid #b2b2b2;
+}
+

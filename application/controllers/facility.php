@@ -41,4 +41,12 @@ class Facility extends CI_Controller {
 		$this->load->view('templates/footer');		
 	}
 	
+	function courts()
+	{
+		$data['title'] = 'Court Management';
+		$this->load->view('templates/header', $data);
+		$this->load->view('facility/courts');
+		$this->load->view('templates/footer');
+	}
+	
 }
