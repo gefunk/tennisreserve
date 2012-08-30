@@ -6,6 +6,8 @@ class Courts extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('courts_model');
+		$this->load->model('facilities');
+		$this->output->enable_profiler(TRUE);
 	}
 	
 	function view($court_id){
@@ -16,6 +18,7 @@ class Courts extends CI_Controller {
 		$this->load->view('court/view', $court_data);
 		$this->load->view('templates/footer');
 	}
+	
 	
 	/*
 		get court info from the screen and pass it to the model		
@@ -32,12 +35,21 @@ class Courts extends CI_Controller {
 	
 		$this->load->view('templates/header', $data);
 		$this->load->view('court/success', $data);
-		$this->load->view('templates/footer');		
+		$this->load->view('templates/footer');
+
 	}
 	
 	function facilitycourts($facility_id){
-		$courts_data['courts'] = $this->courts_model->get_courts($facility_id);
-		$courts_data['facility_name'] = 'Placeholder Name';
+		 $courts = $this->courts_model->get_courts($facility_id);
+		
+		foreach($courts as $court){
+			echo $court['name'];
+		}
+		
+		
+		
+		$courts_data['courts'] = $courts;
+		$courts_data['facility'] = $this->facilities->get_facility($facility_id);
 		
 		$data['title'] = 'All Courts';
 		

@@ -14,7 +14,10 @@ class Facilities extends CI_Model {
 	
 	function get_facility($id)
 	{
-		# code...
+		$query = $this->db->get_where('facilities', "id = $id");  
+		$row =  $query->row();
+		echo $row->name;
+		return $row;
 	}
 	
 	/*

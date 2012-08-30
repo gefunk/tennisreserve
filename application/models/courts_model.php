@@ -16,6 +16,15 @@ class Courts_model extends CI_Model {
 	
 	}
 	
+	function get_court_type($id){
+		$query = $this->db->get_where('court_type', "id = $id");  
+		foreach($query->result() as $row){
+			echo $row->name;
+		}
+	//	echo $row->name;
+		return $row;
+	}
+	
 	function update($court_id, $court_name)
 	{
 		
