@@ -1,12 +1,35 @@
 .court-text{
     margin-left: 5px;
+
 }
 
 #calendar-container{
+    position: relative;
     width: 65%;
     height: 450px;
     overflow: auto;
     padding-right: 5px;
+    float: left;
+}
+
+.booking{
+    cursor: pointer;
+    position: absolute;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: CornflowerBlue;
+    color: white;
+    padding: 5px;
+    display: inline;
+    opacity: 0.75;
+}
+
+.booking-clicked{
+    opacity: 1;
+}
+
+.booking > p{
+    opacity: 1;
 }
 
 #calendar-title{
@@ -32,3 +55,23 @@ table#calendar tr:nth-child(2n+3) > td {
     border-top: 2px solid #b2b2b2;
 }
 
+#month-calendar{
+    float: right;
+    width: 30%;
+}
+
+#month-calendar table{
+    color: #b8b8b8;
+}
+
+#month-calendar table td{
+    cursor: pointer;
+}
+
+#month-calendar table td:hover{
+    background-color: #f0f0f0;
+}
+
+#month-calendar table .highlight{
+    color: #0088CC;
+}
