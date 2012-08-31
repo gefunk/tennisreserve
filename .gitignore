@@ -16,3 +16,5 @@ application/config/config.php
 .idea/vcs.xml
 
 .idea/workspace.xml
+
+application/config/database.php

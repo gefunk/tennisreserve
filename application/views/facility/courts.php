@@ -4,10 +4,72 @@
 var clicked_row = null;
 var row_index = null;
 
+var clicked_day = null;
+
+var monthNames = [ "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ];
+
+var weekday=new Array(7);
+weekday[0]="Sunday";
+weekday[1]="Monday";
+weekday[2]="Tuesday";
+weekday[3]="Wednesday";
+weekday[4]="Thursday";
+weekday[5]="Friday";
+weekday[6]="Saturday";
+
 	$(document).ready(function(){
+		// keep track of the month selected on the page
+		var selected_month = null;
+		var selected_year = null;
+		
 		$("#courts > li").click(function(e){
 			$(this).addClass('active').siblings('li').removeClass('active');
 		});
+		
+		/**
+			get the month calendar on page load
+		**/
+		$.get(
+			'<?php echo site_url("facility/get_calendar"); ?>',
+			function(data){
+				$("#month-calendar").append(data.calendar);
+				selected_month = data.month;
+				selected_year = data.year;
+			},
+			"json"
+		);	
+		
+		$("#month-calendar").on('click', function(e){
+			// check if it is a link
+			var nodeName = e.target.nodeName.toLowerCase();
+			if(nodeName == 'button'){
+				var url = $(e.target).attr('get_url');
+				$.get(
+					url,
+					function(data){
+						$("#month-calendar > table").remove();
+						$(data.calendar).hide().appendTo("#month-calendar").fadeIn();
+						selected_month = data.month;
+						selected_year = data.year;
+					},
+					"json"
+				);
+			}else if(nodeName == 'td'){
+				// remove selected class from old td
+				if(clicked_day)
+					$(clicked_day).removeClass('selected');
+				// add selected to new td
+				$(e.target).addClass('selected');
+				clicked_day = e.target;
+				//change the date on the headings
+				var click_date = new Date(selected_year, parseInt(selected_month,10)-1, $(e.target).html(), 0, 0, 0);
+				var day_header = monthNames[parseInt(selected_month,10)-1] +' '+$(e.target).html();
+				$("#calendar-title").hide()
+					.html("<h1>"+day_header+"</h1><h4>"+weekday[click_date.getDay()]+"</h4>")
+					.fadeIn();
+			}
+		});	
 		
 		/*
 			When a row is clicked it adds a div to the clicked row
@@ -173,9 +235,7 @@ var row_index = null;
 				</div>
 			</div><!-- end court information -->
 			<div id="court-calendar" class="tab-pane active">
-				<div id="calendar-title">
-					<h2>Thursday, Aug 30, 2012</h2>
-				</div>
+
 				<div id="calendar-container">
 					<table id="calendar" class="table table-hover" cellspacing="5" cellpadding="5">
 						<tr id="00_00">
@@ -373,7 +433,11 @@ var row_index = null;
 					</table>
 				</div>
 				<div id="month-calendar">
-					<?php echo $this->calendar->generate($this->uri->segment(3), $this->uri->segment(4)); ?>
+					<div id="calendar-title">
+						<h1>Aug 30</h1>
+						<h4>Thursday</h4>
+					</div>
+					
 				</div>
 				
 			</div><!-- end court calendar tab -->

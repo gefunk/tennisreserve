@@ -58,6 +58,7 @@ table#calendar tr:nth-child(2n+3) > td {
 #month-calendar{
     float: right;
     width: 30%;
+    color: #b2b2b2;
 }
 
 #month-calendar table{
@@ -68,10 +69,18 @@ table#calendar tr:nth-child(2n+3) > td {
     cursor: pointer;
 }
 
+#month-calendar table a{
+    cursor: pointer;
+}
+
 #month-calendar table td:hover{
     background-color: #f0f0f0;
 }
 
-#month-calendar table .highlight{
+#month-calendar table div.highlight{
+    color: #625D5D;
+}
+
+#month-calendar table td.selected{
     color: #0088CC;
 }
