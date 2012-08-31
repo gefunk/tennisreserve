@@ -19,103 +19,17 @@ weekday[5]="Friday";
 weekday[6]="Saturday";
 
 	$(document).ready(function(){
-		// keep track of the month selected on the page
-		var selected_month = null;
-		var selected_year = null;
+
 		
 		$("#courts > li").click(function(e){
 			$(this).addClass('active').siblings('li').removeClass('active');
 		});
 		
-		/**
-			get the month calendar on page load
-		**/
-		$.get(
-			'<?php echo site_url("facility/get_calendar"); ?>',
-			function(data){
-				$("#month-calendar").append(data.calendar);
-				selected_month = data.month;
-				selected_year = data.year;
-			},
-			"json"
-		);	
 		
-		$("#month-calendar").on('click', function(e){
-			// check if it is a link
-			var nodeName = e.target.nodeName.toLowerCase();
-			if(nodeName == 'button'){
-				var url = $(e.target).attr('get_url');
-				$.get(
-					url,
-					function(data){
-						$("#month-calendar > table").remove();
-						$(data.calendar).hide().appendTo("#month-calendar").fadeIn();
-						selected_month = data.month;
-						selected_year = data.year;
-					},
-					"json"
-				);
-			}else if(nodeName == 'td'){
-				// remove selected class from old td
-				if(clicked_day)
-					$(clicked_day).removeClass('selected');
-				// add selected to new td
-				$(e.target).addClass('selected');
-				clicked_day = e.target;
-				//change the date on the headings
-				var click_date = new Date(selected_year, parseInt(selected_month,10)-1, $(e.target).html(), 0, 0, 0);
-				var day_header = monthNames[parseInt(selected_month,10)-1] +' '+$(e.target).html();
-				$("#calendar-title").hide()
-					.html("<h1>"+day_header+"</h1><h4>"+weekday[click_date.getDay()]+"</h4>")
-					.fadeIn();
-			}
-		});	
 		
-		/*
-			When a row is clicked it adds a div to the clicked row
-			when the a second row is clicked it extends the div to that row
-		*/
-		$("table#calendar tr").click(function(e){
-			// check if there already been a row clicked
-			if(!clicked_row){
-				/* 
-					there hasn't been a table row clicked, 
-					set the clicked_row variable to equal the currently clicked row
-				*/
-				clicked_row = this;
-				// get the table cell, position
-				var tdcell = $(this).children('td:eq(1)');
-				var col_position = $(tdcell).position();
-				// get the table position so we can calcuate the relative position
-				var table_calendar_position = $("table#calendar").position();
-				// calculate the top location of where the iv should be added
-				var top = Math.abs(table_calendar_position.top-col_position.top)+3;
-				// add the div to the page on top of the table
-				$("#calendar-container > table").before('<div id="booking_example" class="booking" rel="popover" style="top:'+top+'px;left:'+(col_position.left+5)+'px;height:'+$(tdcell).css('height')+';width:'+($(tdcell).width()-10)+'px"><p>Rahul Gokulnath and Pritesh Parekh</p></div>');
-			}else{
-				// get the cell where the div should end on
-				var tdcell = $(this).children('td:eq(1)');
-				// calculate the position of the cell
-				var col_position = $(tdcell).position();
-
-				// get the div and the position of the div
-				var booking_div = $("#booking_example");
-				var booking_position = $(booking_div).position();
-				// set the div height to the end div
-				$(booking_div).height(Math.abs((col_position.top+$(tdcell).height()) - booking_position.top));
-				// clear the clicked_row variable
-				clicked_row = null;
-			}
-		}).hover(
-			function(e){
-				if(clicked_row){
-					$(this).children('td:eq(1)').css('background-color','LightSkyBlue');
-				}
-			},
-			function(e){
-				$(this).children('td:eq(1)').css('background-color','');
-			}
-		);
+		
+		
+		
 		
 		$('#calendar-container').on('click','div.booking', function(){
 			var div_value = $(this).children('p').text();
