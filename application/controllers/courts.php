@@ -7,16 +7,12 @@ class Courts extends CI_Controller {
 		parent::__construct();
 		$this->load->model('courts_model');
 		$this->load->model('facilities');
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 	}
 	
 	function view($court_id){
-		$court_data['court'] = $this->courts_model->get_court($court_id);
-		$data['title'] = 'Court Information';
-		
-		$this->load->view('templates/header', $data);
-		$this->load->view('court/view', $court_data);
-		$this->load->view('templates/footer');
+		$court_data = $this->courts_model->get_court($court_id);
+		echo json_encode($court_data);
 	}
 	
 	
@@ -40,22 +36,15 @@ class Courts extends CI_Controller {
 	}
 	
 	function facilitycourts($facility_id){
-		 $courts = $this->courts_model->get_courts($facility_id);
-		
-		foreach($courts as $court){
-			echo $court['name'];
-		}
-		
-		
-		
-		$courts_data['courts'] = $courts;
-		$courts_data['facility'] = $this->facilities->get_facility($facility_id);
-		
-		$data['title'] = 'All Courts';
-		
-		$this->load->view('templates/header', $data);
-		$this->load->view('court/facilitycourts', $courts_data);
-		$this->load->view('templates/footer');
+
+		$courts = $this->courts_model->get_courts($facility_id);
+	
+        $courts_data['courts'] = $courts;
+
+        $data['title'] = 'Court Management';
+        $this->load->view('templates/header', $data);
+        $this->load->view('court/facilitycourts', $courts_data );
+        $this->load->view('templates/footer');
 	}
 
 	
