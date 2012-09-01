@@ -27,10 +27,12 @@ class Courts_model extends CI_Model {
         return $row->name;
     }
 
-	function update($court_id, $court_name)
+	function update($court_id, $court_name, $court_type, $lights)
 	{
 		$data = array(
-		   'name' => $court_name
+		   'name' => $court_name,
+			'court_type' => $court_type,
+			'lights' => $lights
 		  );
 
 		$this->db->where('id', $court_id);

@@ -142,6 +142,22 @@ weekday[6]="Saturday";
 			}
 		);
 
+		$("#court_info_form").submit(function(event) {
+			
+			event.preventDefault(); 
+			$.post('<?php echo site_url("courts/update");?>', {
+				//set the post values
+					court_id : $("#court_id").val(),
+					court_name : $("#court_name").val(),
+					court_type : $("#court_type_buttons > button.active").attr('court_type'),
+					lights : $("#lights_avail_buttons > button.active").attr('lights')
+					
+				}, 
+				function(data){
+					$("#court_info_alert").show();
+			});
+		});
+
     });
 
 </script>
@@ -173,9 +189,15 @@ weekday[6]="Saturday";
 <div class="tab-content">
 
 <div id="court-information" class="tab-pane">
-	<form action="<?php echo site_url('courts/update'); ?>" method="post" accept-charset="utf-8">
+
+	<form action="<?php echo site_url('courts/update'); ?>" id="court_info_form" method="post" accept-charset="utf-8">
 		<fieldset>
 			<legend>Court Information</legend>
+			<div id="court_info_alert" class="alert success hide fade in">
+				<button class="close" data-dismiss="alert" type="button">×</button>
+				<strong>Success.</strong>
+				Your changes to the court information were saved!
+			</div>
 			<div class="control-group">
 				<label class="control-label" for="court_name">Court Name</label>
 				<div class="controls">
@@ -186,19 +208,19 @@ weekday[6]="Saturday";
 			<div class="control-group">
 				<label>Court Type</label>
 				<div class="controls">
-					<div class="btn-group" data-toggle="buttons-radio">
-						<button id="court_type_1" type="button" class="btn">Hard</button>
-						<button id="court_type_2"  type="button" class="btn">Clay</button>
-						<button id="court_type_3"   type="button" class="btn">Grass</button>
+					<div id="court_type_buttons" class="btn-group" data-toggle="buttons-radio">
+						<button id="court_type_1" court_type="1" type="button" class="btn">Hard</button>
+						<button id="court_type_2" court_type="2" type="button" class="btn">Clay</button>
+						<button id="court_type_3" court_type="3" type="button" class="btn">Grass</button>
 					</div>
 				</div>
 			</div>
 			<div class="control-group">
 				<label>Lights</label>
 				<div class="controls">
-					<div class="btn-group" data-toggle="buttons-radio">
-						<button id="lights_1" type="button" class="btn">Available</button>
-						<button id="lights_0" type="button" class="btn">Not Available</button>
+					<div id="lights_avail_buttons" class="btn-group" data-toggle="buttons-radio">
+						<button id="lights_1" lights="1" type="button" class="btn">Available</button>
+						<button id="lights_0" lights="0" type="button" class="btn">Not Available</button>
 					</div>
 				</div>
 			</div>

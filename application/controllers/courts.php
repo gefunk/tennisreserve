@@ -7,6 +7,7 @@ class Courts extends CI_Controller {
 		parent::__construct();
 		$this->load->model('courts_model');
 		$this->load->model('facilities');
+	
 		//$this->output->enable_profiler(TRUE);
 	}
 	
@@ -23,15 +24,13 @@ class Courts extends CI_Controller {
 	{
 		// save the court information to the database
 		$court_id = $this->input->post('court_id');
-		$court_name = $this->input->post('court_name');
+		$court_type = $this->input->post('court_type');
+		$court_name = $this->input->post('court_name');		
+		$lights = $this->input->post('lights');
 		
-		$this->courts_model->update($court_id, $court_name);
+		$this->courts_model->update($court_id, $court_name, $court_type, $lights);
 		
-		$data['title'] = 'You updated the court';
-	
-		$this->load->view('templates/header', $data);
-		$this->load->view('court/success', $data);
-		$this->load->view('templates/footer');
+		echo "success";
 
 	}
 	
