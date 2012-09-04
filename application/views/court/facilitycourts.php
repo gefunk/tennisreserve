@@ -5,6 +5,7 @@
 <script language="javascript">
 
     $(document).ready(function(){
+<<<<<<< HEAD
 	
         
 		$("table#time").droppable({
@@ -13,6 +14,11 @@
 		});
 
 		$("#courts > li").click(function(e){
+=======
+        $("#courts > li").click(function(e){
+			//hide the save success or failure message if it's showing on the screen
+			$("#court_info_alert").fadeOut();
+>>>>>>> Minor display stuff
             $(this).addClass('active').siblings('li').removeClass('active');
             var courtId = this.id;
             $.post('<?php echo site_url("courts/view");?>' + '/' + courtId, function(data){
@@ -100,6 +106,7 @@
 					left: position.left+width+15,
 					top: position.top-title_height-13
 				}
+<<<<<<< HEAD
 			).fadeIn();
 		});
 		
@@ -110,11 +117,25 @@
 
 
 <<<<<<< HEAD
+=======
+			},
+			function(e){
+				$(this).children('td:eq(1)').css('background-color','');
+			}
+		);
+		
+		//if the close button on the success/failure message is selected, fade the message out
+		$("#close_alert").click(function(e){
+			$("#court_info_alert").fadeOut();
+		});
+		
+		//ajax save of the court information
+>>>>>>> Minor display stuff
 		$("#court_info_form").submit(function(event) {
-			
+			//prevent the default form submit
 			event.preventDefault(); 
 			$.post('<?php echo site_url("courts/update");?>', {
-				//set the post values
+				//set the post values from the court information form
 					court_id : $("#court_id").val(),
 					court_name : $("#court_name").val(),
 					court_type : $("#court_type_buttons > button.active").attr('court_type'),
@@ -122,8 +143,9 @@
 					
 				}, 
 				function(data){
-					$("#court_info_alert").show();
-			});
+				 	$("#court_name_" + $("#court_id").val()).text(data);
+					$("#court_info_alert").fadeIn();
+			}, "json");
 		});
 
     });
@@ -173,7 +195,7 @@
                 <img src="<?php echo base_url(); ?>assets/img/<?php echo $court['court_type_name'];?>_court.png" />
                 <span class="court-text"><?php echo $court['number']; ?></span>
 				<br/>
-				<small><?php echo $court['name'];?></small>
+				<small id="court_name_<?php echo $court['id'];?>"><?php echo $court['name'];?></small>
             </a>
         </li>
         <?php endforeach?>
@@ -193,7 +215,7 @@
 		<fieldset>
 			<legend>Court Information</legend>
 			<div id="court_info_alert" class="alert success hide fade in">
-				<button class="close" data-dismiss="alert" type="button">×</button>
+				<button class="close" id="close_alert" type="button">×</button>
 				<strong>Success.</strong>
 				Your changes to the court information were saved!
 			</div>

@@ -30,7 +30,7 @@ class Courts extends CI_Controller {
 		
 		$this->courts_model->update($court_id, $court_name, $court_type, $lights);
 		
-		echo "success";
+		echo json_encode($court_name);
 
 	}
 	
