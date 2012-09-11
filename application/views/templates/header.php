@@ -7,8 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 	<script src="<?php echo base_url();?>assets/js/jquery.js"></script>
+	<script src="<?php echo base_url();?>assets/js/jquery-ui.js"></script>
     <!-- Le styles -->
     <link href="<?php echo base_url();?>assets/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/jquery-ui/jquery-ui.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -16,7 +18,7 @@
       }
     </style>
     <link href="<?php echo base_url();?>assets/css/bootstrap-responsive.css" rel="stylesheet">
-
+	<link href="<?php echo base_url();?>assets/css/global.css" rel="stylesheet">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -45,7 +47,7 @@
             <ul class="nav">
               <li class="active"><a href="<?php echo site_url('home');?>">Home</a></li>
               <li><a href="<?php echo site_url('about');?>">About</a></li>
-             <li><a href="<?php echo site_url('contact');?>">Contact</a></li>
+              <li><a href="<?php echo site_url('contact');?>">Contact</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                 <ul class="dropdown-menu">

@@ -1,3 +1,10 @@
+* {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition:    all 0.2s ease;
+  -ms-transition:     all 0.2s ease;
+  -o-transition:      all 0.2s ease;
+}
+
 .court-text{
     margin-left: 5px;
 
@@ -13,7 +20,6 @@
 }
 
 .booking{
-    cursor: pointer;
     position: absolute;
     border: 1px solid gray;
     border-radius: 5px;
@@ -22,6 +28,7 @@
     padding: 5px;
     display: inline;
     opacity: 0.75;
+    z-index: 1000;
 }
 
 .booking-clicked{
@@ -36,22 +43,27 @@
 
 }
 
-table#calendar tr > td:last-child {
+table#time tr.not-available {
+    display: none;
+    background-color: #f2f2f2;
+}
+
+table#time tr > td:last-child {
     cursor: pointer;
 
 }
 
-table#calendar tr > td:first-child {
+table#time tr > td:first-child {
     width: 15%;
     text-align: right;
     color: #c1c1c1;
 }
 
-table#calendar tr:nth-child(2n+1) > td:first-child{
+table#time tr:nth-child(2n+1) > td:first-child{
     color: #a4a4a4;
 }
 
-table#calendar tr:nth-child(2n+3) > td {
+table#time tr:nth-child(2n+3) > td {
     border-top: 2px solid #b2b2b2;
 }
 
@@ -83,4 +95,58 @@ table#calendar tr:nth-child(2n+3) > td {
 
 #month-calendar table td.selected{
     color: #0088CC;
+}
+
+
+#res-info{
+    position: absolute;
+    float: left;
+    border: 1px solid #BBBBBB;
+    border-radius: 6px;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.3);
+    width: 260px;
+    z-index: 100;
+    background-color: white;
+    display: none;
+}
+
+#res-info > div.title{
+    border-bottom:1px solid #DEDEDE;
+    background-color: #F7F7F7;
+    border-radius: 6px 6px 0px 0px;
+    padding: 5px 5px 5px 10px;
+}
+
+
+#res-info > div.content{
+    margin-left: 25px;
+    margin-right: 3px;
+    margin-top: 5px;
+    
+}
+#res-info > div.controls {
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+#res-info > div.content > table{
+    margin-top: 10px;
+}
+
+#left-arrow{
+    float: left;
+    position: relative;
+    top: 5px;
+    left: -13px;
+    background-color: #FFF;
+    border-left: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    width: 25px;
+    height: 25px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45eg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Safari and Chrome */
+    -o-transform: rotate(45deg); /* Opera */
+    -moz-transform: rotate(45deg); /* Firefox */
+    /*box-shadow: 3px 0px 0px rgba(0, 0, 0, 0.3);*/
 }

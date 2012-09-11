@@ -1,0 +1,55 @@
+
+#reservations {
+    position: relative;
+    display: inline-block;
+}
+
+#reservations tr > td {
+    cursor: pointer;
+    min-width: 200px;
+    width: 200px;
+    border: 1px solid #DDD;
+    height: 30px;
+    background-color: #F3EFE0;
+}
+
+#reservations tr > td:hover{
+    background-color: #217C7E;
+    opacity: 0.7;
+}
+
+#timings {
+    position: absolute;
+    text-align: right;
+    background-color: #FFF;
+    border-right: 1px solid #3399FF;
+    display: inline-block;
+    z-index: 1;
+    color: #217C7E;
+    
+}
+
+#timings > table{
+    text-align: right;
+    
+}
+
+#timings tr > td{
+    border-top: 1px solid #3399FF;
+    border-bottom: 1px solid #3399FF;
+    height: 30px;
+}
+
+#heading{
+    color: #217C7E;
+    position: absolute;
+    background-color: #FFF;
+    border-bottom: 1px solid #DDDDDD;
+    z-index: 1;
+}
+
+#heading th{
+    width: 200px;
+    min-width: 200px;
+}
+

@@ -20,6 +20,30 @@ class Facilities extends CI_Model {
 		return $row;
 	}
 	
+	function get_timings($id)
+	{
+		$this->db->select('open_time,close_time');
+		$this->db->from('facilities');
+		$this->db->where("id",$id);  
+		$query = $this->db->get();
+		if($query->num_rows() > 0)
+			return $query->result();
+		else
+			return null;
+		
+	}
+	
+	function get_courts($facility_id){
+		$this->db->select('id, court_type, name');
+		$this->db->from('courts');
+		$this->db->where('facility_id', $facility_id);
+		$query = $this->db->get();
+		if($query->num_rows() > 0)
+			return $query->result();
+		else 
+			return null;
+	}
+	
 	/*
 		add a facility to the database
 	*/

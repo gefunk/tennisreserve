@@ -7,7 +7,11 @@ class Courts extends CI_Controller {
 		parent::__construct();
 		$this->load->model('courts_model');
 		$this->load->model('facilities');
+<<<<<<< HEAD
 	
+=======
+		$this->load->model('reservations');
+>>>>>>> Updated bunches of stuff - calendar most important
 		//$this->output->enable_profiler(TRUE);
 	}
 	
@@ -34,6 +38,9 @@ class Courts extends CI_Controller {
 
 	}
 	
+	/**
+		returns courts for a facility based on id
+	**/
 	function facilitycourts($facility_id){
 
 		$courts = $this->courts_model->get_courts($facility_id);
@@ -46,7 +53,68 @@ class Courts extends CI_Controller {
         $this->load->view('templates/footer');
 	}
 	
+	/**
+		initializes a reservation in the database
+	**/
+	function start_reservation()
+	{
+		$user_id = $this->input->post('user_id');
+		$court_id = $this->input->post('court_id');
+		$start_time = $this->input->post('start_time');
+		// format the start for mysql time format
+		$start_time = str_replace('_', ':',$start_time).":00";
+		$date = $this->input->post('date');
+		// return the id of the reservation to the UI
+		echo json_encode(array("id" => $this->reservations->add($user_id, $court_id,  $date, $start_time)));
+	}
 	
+	/**
+		update reservation end time
+	**/
+	function update_reservation(){
+		$id = $this->input->post('id', TRUE);
+		$end_time = $this->input->post('end_time');
+		$end_time = str_replace('_', ':',$end_time).":00";
+		$this->reservations->update_end_time($id, $end_time);
+	}
+	
+	
+	
+	function get_reservations($date)
+	{
+		$reservations = $this->reservations->get_reservations_for_date($date);
+		$result = array();
+		foreach($reservations as $reservation){
+			$result[$reservation->id] = array(
+				'start_time' => $this->format_time($reservation->start_time),
+				'end_time' => $this->format_time($reservation->end_time)
+				);
+		}
+		echo json_encode($result);
+	}
+	
+	function get_facility_times($facility_id)
+	{
+		$timings = null;
+		foreach($this->facilities-> get_timings($facility_id) as $row){
+			$timings = array('open_time' => $row->open_time, 'close_time' => $row->close_time);
+		} 
+		echo json_encode($timings);
+	}
+	
+	/**
+		format time string for UI
+		will cut off seconds and replace ':' with '_'
+	**/
+	function format_time($time)
+	{
+		return str_replace(':', '_', substr($time, 0, -3));
+	}
+	
+	/**
+		returns a codeigniter calendar via json to the UI
+		The calendar module on the right of the courts pages uses this
+	**/
 	function get_calendar($year=null, $month=null){
 		
 		if(!isset($year)){
@@ -99,7 +167,31 @@ class Courts extends CI_Controller {
 	}
 	
 	
+	function get_time_calendar($num_courts = 1)
+	{
+		// generate columns for courts
+		$court_cols = '';
+		for($court = 0; $court < $num_courts; $court++){
+			$court_cols .= '<td></td>';
+		}
 
+		$html = '<table id="time" class="table table-hover table-bordered" cellspacing="5" cellpadding="5">';
+		for($hour = 0; $hour < 24; $hour++){
+			$hour_str = date("H", mktime($hour, 0, 0, 7, 1, 2000));
+			$html .= '<tr id='.$hour_str."_00".'>';
+			$html .= '<td>'.date("h A", mktime($hour, 0, 0, 7, 1, 2000)).'</td>';
+			$html .= $court_cols;
+			$html .= '</tr>';
+			$html .= '<tr id='.$hour_str."_30".'>';
+			$html .= '<td>'.date("h:i", mktime($hour, 30, 0, 7, 1, 2000)).'</td>';			
+			$html .= $court_cols;
+			$html .= '</tr>';
+		}
+		$html .= "</table>";
+		echo $html;
+
+		
+	}
 	
 	
 }
