@@ -8,6 +8,7 @@
     <meta name="author" content="">
 	<script src="<?php echo base_url();?>assets/js/jquery.js"></script>
 	<script src="<?php echo base_url();?>assets/js/jquery-ui.js"></script>
+	<script src="<?php echo base_url();?>assets/js/global.js"></script>
     <!-- Le styles -->
     <link href="<?php echo base_url();?>assets/css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/jquery-ui/jquery-ui.css" rel="stylesheet">

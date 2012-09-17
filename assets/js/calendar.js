@@ -162,27 +162,9 @@ function handle_drop (event, ui) {
         if they drag more than half of it over to the right column, then it should go right
     */    
     var $element = $(ui.helper);
-    var element_width = $element.width();
-    var top = ui.offset.top - $(window).scrollTop() - 2;
-    var left = ui.offset.left - $(window).scrollLeft() - 3;
-    //var top = ui.position.top;
-    //var left = ui.position.left;
-    var element_found = document.elementFromPoint(left,top);
-    console.log(
-        "Element Found", element_found,
-        "Top", top,
-        "left", left);
-    // check if we have found a table cell to drop it on
-    var bottom_cell = get_bottom_cell($div);
-    if(element_found.nodeName.toLowerCase() == 'td'){    
-        var $top_cell = $(element_found);
-        var top_cell_right = ($top_cell.offset().left - $(window).scrollLeft())+$top_cell.width();
-        console.log("Originally PIcked", $top_cell, "right", top_cell_right);
-        var middle_of_element = left + (element_width/2);
-        if(middle_of_element > top_cell_right){
-            $top_cell = $top_cell.next();
-        }
-    
+    // get the closest cell
+    var $top_cell = find_closest_cell($element)
+    if($top_cell.length){
         var go_left = $top_cell.position().left+1;
         var go_top = $top_cell.position().top;
         console.log("Should be going Left", go_left, "Top", go_top);
@@ -203,7 +185,7 @@ function handle_drop (event, ui) {
 **/
 function handle_resize(event, ui){
     var $div = $(ui.helper);
-	var bottom_cell =  get_bottom_cell($div);
+	var bottom_cell = get_bottom_cell($div);
     if(bottom_cell.nodeName.toLowerCase() == 'td'){
         // get the cell below the bottom cell
         bottom_cell = $(bottom_cell).closest('tr').next().children().eq($(bottom_cell).index());
@@ -218,6 +200,9 @@ function handle_resize(event, ui){
         */
         var height_of_div = calculate_height_div($div,$(bottom_cell));
     	$(ui.helper).height(height_of_div);
+    }else{
+        console.log("Resetting resize");
+        $(ui.helper).height(ui.originalSize.height);
     }	
 }
 
@@ -276,10 +261,12 @@ function attach_scroll_handler () {
 
 // get the cell which is at the bottom of the booking div 
 function get_bottom_cell ($div) {
-    var left = $div.offset().left-$(window).scrollLeft()-1;
-    var top = ($div.offset().top-$(window).scrollTop())+$div.height()+2;
+    var left = $div.absoluteLeft()+$div.width()+4;
+    var top = $div.absoluteTop()+$div.outerHeight(true)+4;
+    console.log("Bottom of Div", $div.css('bottom'));
 	var element = document.elementFromPoint(left,top);
-	if(element.length && element.nodeName.toLowerCase() == 'td'){
+    console.log("Looking for bottom cell here left:",left,"Top", top, "Found", element);
+	if(element && element.nodeName.toLowerCase() == 'td'){
 	    return element;
 	}
 	return null;
@@ -290,6 +277,66 @@ function calculate_height_div($start_td, $end_td){
 	var height_of_div = ($end_td.offset().top-$(window).scrollTop()) - ($start_td.offset().top - $(window).scrollTop())  ;
     height_of_div =  height_of_div - ((bottom_padding+top_padding)*2 + 1);   
     return height_of_div;
+}
+
+/**
+    find the cell where the draggable object
+    should go
+**/
+function find_closest_cell ($element) {
+    // cell we will tell the draggable to go to
+    var $cell = null;
+    
+    var element_width = $element.width();
+    var top = $element.absoluteTop();
+    var left = $element.absoluteLeft();
+    var middle_of_element = left + (element_width/2);
+    // element to the top and left of the div
+    var element_top_left = document.elementFromPoint(left - 3,top - 2);
+    // element to the top and right of the div
+    var element_top_right = document.elementFromPoint(left+element_width + 3,top - 2);
+
+    console.log("top", top,
+    "left", left,
+    "Top Left Element", element_top_left,
+    "Top Right Element", element_top_right);
+
+    
+    var top_left_is_td = false;
+    // check top left element is td
+    if(element_top_left.nodeName.toLowerCase() == 'td'){
+        top_left_is_td = true;
+        $cell = $(element_top_left);
+    }
+    
+    var top_right_is_td = false;
+    if(element_top_right.nodeName.toLowerCase() == 'td'){
+        top_right_is_td = true;
+    }
+    
+
+    // based on the div is dropped halfway on the right cell, check if we should go right
+    if(top_left_is_td){
+        // if top right cell is also td, check if we should go there
+        if(top_right_is_td){
+            var top_left_cell_right = ($(element_top_left).offset().left - $(window).scrollLeft())+$(element_top_left).width();
+
+            if(middle_of_element > top_left_cell_right){
+                $cell = $cell.next();
+            }
+        }
+        // check if draggable elements top is more than halfway down the cell
+        // if it is go to the cell below 
+        console.log("Checking to go bottom, Top", top,
+            "Cell middle", $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) );
+        if(top > $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) )
+            $cell = $($cell.closest('tr').next().children().eq($cell.index()));
+            
+        
+    }
+    
+    return $cell;
+    
 }
 
 function get_resizable_options (width) {
