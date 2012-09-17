@@ -164,14 +164,27 @@ function handle_drop (event, ui) {
     var $element = $(ui.helper);
     // get the closest cell
     var $top_cell = find_closest_cell($element)
-    if($top_cell.length){
+    
+    if($top_cell && $top_cell.length){
+        // get the end time cell
+        var bottom_cell = document.elementFromPoint($top_cell.absoluteLeft(), $top_cell.absoluteTop()+$element.height()+20);
+        console.log(
+            "Looked here left", $top_cell.absoluteLeft(),
+            "top", $top_cell.absoluteTop()+$element.height()+20,
+            "On drag got this bottom cell", bottom_cell);
+        $bottom_cell = $(bottom_cell); //.closest('tr').next().children().eq($(bottom_cell).index());
+        
         var go_left = $top_cell.position().left+1;
         var go_top = $top_cell.position().top;
         console.log("Should be going Left", go_left, "Top", go_top);
         $(ui.draggable).animate({
             left: go_left,
             top: go_top
+        },function(){
+
+            change_reservation($element.attr('id'), $top_cell.attr("court-id"), $top_cell.parent().attr('id'), $bottom_cell.parent().attr('id'));
         });
+        
     }else{
         console.log("Did not find td reverting");
         // revert to original position
@@ -186,7 +199,7 @@ function handle_drop (event, ui) {
 function handle_resize(event, ui){
     var $div = $(ui.helper);
 	var bottom_cell = get_bottom_cell($div);
-    if(bottom_cell.nodeName.toLowerCase() == 'td'){
+    if(bottom_cell && bottom_cell.nodeName.toLowerCase() == 'td'){
         // get the cell below the bottom cell
         bottom_cell = $(bottom_cell).closest('tr').next().children().eq($(bottom_cell).index());
         
@@ -296,11 +309,12 @@ function find_closest_cell ($element) {
     // element to the top and right of the div
     var element_top_right = document.elementFromPoint(left+element_width + 3,top - 2);
 
+    /*
     console.log("top", top,
     "left", left,
     "Top Left Element", element_top_left,
     "Top Right Element", element_top_right);
-
+    */
     
     var top_left_is_td = false;
     // check top left element is td
@@ -319,16 +333,17 @@ function find_closest_cell ($element) {
     if(top_left_is_td){
         // if top right cell is also td, check if we should go there
         if(top_right_is_td){
-            var top_left_cell_right = ($(element_top_left).offset().left - $(window).scrollLeft())+$(element_top_left).width();
-
+            var top_left_cell_right = $(element_top_left).absoluteLeft()+$(element_top_left).width();
+            //console.log("top left cell right", top_left_cell_right, "middle", middle_of_element);
             if(middle_of_element > top_left_cell_right){
+                //console.log("Going right");
                 $cell = $cell.next();
             }
         }
         // check if draggable elements top is more than halfway down the cell
         // if it is go to the cell below 
-        console.log("Checking to go bottom, Top", top,
-            "Cell middle", $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) );
+        /*console.log("Checking to go bottom, Top", top,
+            "Cell middle", $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) );*/
         if(top > $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) )
             $cell = $($cell.closest('tr').next().children().eq($cell.index()));
             

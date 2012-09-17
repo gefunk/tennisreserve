@@ -56,7 +56,7 @@ class Reserve extends CI_Controller {
 		$id = $this->input->post('id', TRUE);
 		
 		$court_id = $this->input->post('court_id');
-		if(isset($court_id) && intval($court_id) > 0){
+		if(!isset($court_id) && !intval($court_id) > 0){
 			$court_id = null;
 		}
 		

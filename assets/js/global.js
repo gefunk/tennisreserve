@@ -7,5 +7,5 @@ $.fn.absoluteTop = function() {
 
 $.fn.absoluteLeft = function(){
     var o = $(this[0]);
-    return o.offset().left - $(window).scrollTop();
+    return o.offset().left - $(window).scrollLeft();
 }
