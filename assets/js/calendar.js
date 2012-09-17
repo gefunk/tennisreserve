@@ -304,13 +304,13 @@ function find_closest_cell ($element) {
     
     var top_left_is_td = false;
     // check top left element is td
-    if(element_top_left.nodeName.toLowerCase() == 'td'){
+    if(element_top_left && element_top_left.nodeName.toLowerCase() == 'td'){
         top_left_is_td = true;
         $cell = $(element_top_left);
     }
     
     var top_right_is_td = false;
-    if(element_top_right.nodeName.toLowerCase() == 'td'){
+    if(element_top_right && element_top_right.nodeName.toLowerCase() == 'td'){
         top_right_is_td = true;
     }
     
