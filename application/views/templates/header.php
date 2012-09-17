@@ -60,6 +60,14 @@
                   <li><a href="#">One more separated link</a></li>
                 </ul>
               </li>
+			  <?php if($title == 'Calendar') { ?>
+			  <li class="dropdown active">
+				<a id="date" href="#" class="dropdown-toggle" data-toggle="dropdown">Calendar <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+                  <li id="calendar" ><?php echo $this->calendar->generate(); ?></li>
+                </ul>
+              </li>
+			  <?php } ?>
             </ul>
             <form class="navbar-form pull-right">
               <input class="span2" type="text" placeholder="Email">

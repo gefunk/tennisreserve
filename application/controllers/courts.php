@@ -7,11 +7,7 @@ class Courts extends CI_Controller {
 		parent::__construct();
 		$this->load->model('courts_model');
 		$this->load->model('facilities');
-<<<<<<< HEAD
-	
-=======
 		$this->load->model('reservations');
->>>>>>> Updated bunches of stuff - calendar most important
 		//$this->output->enable_profiler(TRUE);
 	}
 	
@@ -80,12 +76,13 @@ class Courts extends CI_Controller {
 	
 	
 	
-	function get_reservations($date)
+	function get_reservations($facility_id, $date)
 	{
-		$reservations = $this->reservations->get_reservations_for_date($date);
+		$reservations = $this->reservations->get_reservations_for_date($facility_id, $date);
 		$result = array();
 		foreach($reservations as $reservation){
 			$result[$reservation->id] = array(
+				'court_id' => $reservation->court_id,
 				'start_time' => $this->format_time($reservation->start_time),
 				'end_time' => $this->format_time($reservation->end_time)
 				);

@@ -19,17 +19,10 @@ weekday[5]="Friday";
 weekday[6]="Saturday";
 
 	$(document).ready(function(){
-
 		
 		$("#courts > li").click(function(e){
 			$(this).addClass('active').siblings('li').removeClass('active');
 		});
-		
-		
-		
-		
-		
-		
 		
 		$('#calendar-container').on('click','div.booking', function(){
 			var div_value = $(this).children('p').text();
@@ -44,8 +37,6 @@ weekday[6]="Saturday";
 			}
 			$(this).popover(options);
 		});
-		
-
 		
 	});
 

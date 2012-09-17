@@ -9,14 +9,12 @@
     min-width: 200px;
     width: 200px;
     border: 1px solid #DDD;
+    min-height: 30px;
     height: 30px;
+    max-height: 30px;
     background-color: #F3EFE0;
 }
 
-#reservations tr > td:hover{
-    background-color: #217C7E;
-    opacity: 0.7;
-}
 
 #timings {
     position: absolute;
@@ -37,7 +35,9 @@
 #timings tr > td{
     border-top: 1px solid #3399FF;
     border-bottom: 1px solid #3399FF;
+    min-height: 30px;
     height: 30px;
+    max-height: 30px;
 }
 
 #heading{
@@ -53,3 +53,61 @@
     min-width: 200px;
 }
 
+
+.booking{
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: CornflowerBlue;
+    color: white;
+    padding: 5px;
+    display: inline;
+    opacity: 0.75;
+    z-index: 1000;
+    width: 188px;
+}
+
+#calendar > div{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#calendar div.heading{
+    text-align: center;
+}
+
+#calendar div.heading > a{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#calendar div.heading > span.title{
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#calendar div.heading > button#calendar-previous{
+    float: left;
+}
+
+#calendar div.heading > button#calendar-next{
+    float: left;
+}
+
+
+#calendar td{
+    padding: 4px;
+    color: #333333;
+}
+
+
+#calendar td > div.highlight{
+    font-weight: bold;
+}
+
+#calendar td:hover{
+    background-color: #0081C2;
+    background-image: -moz-linear-gradient(center top , #0088CC, #0077B3);
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+    cursor: pointer;
+}

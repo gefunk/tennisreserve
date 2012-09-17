@@ -25,11 +25,16 @@ class Reservations extends CI_Model {
 	}
 	
 	/**
-		update end time for a reservation
+		update a reservation
+		court_id and start_time may be null
 	**/
-	function update_end_time($id, $end_time)
+	function update($id, $court_id, $start_time, $end_time)
 	{
-		$res_data = array('end_time' => $end_time);
+		$res_data['end_time'] = $end_time;
+		if(isset($court_id) && intval($court_id) > 0)
+			$res_data['court_id'] = $court_id;
+		if(isset($start_time))
+			$res_data['start_time'] = $start_time;
 		$this->db->where('id', $id);
 		$this->db->update('reservations', $res_data);
 	}
@@ -37,8 +42,22 @@ class Reservations extends CI_Model {
 	/**
 		given a date, return all the reservations for this date
 	**/
-	function get_reservations_for_date($date){
-		$query = $this->db->get_where('reservations', "date = '$date'");  
+	function get_reservations_for_date($facility_id, $date){
+		// get the id of all the courts for this facility
+		$this->db->select("id");
+		$this->db->from("courts");
+		$this->db->where("facility_id", $facility_id);
+		$query = $this->db->get();
+		
+		$court_ids = array();
+		
+		foreach($query->result() as $row){
+			$court_ids[] = $row->id;
+		}
+		
+		$this->db->where('date', $date); 
+		$this->db->where_in('court_id', $court_ids);  
+		$query = $this->db->get('reservations');
 		return $query->result();
 	}
 	

@@ -7,6 +7,49 @@ class Facility extends CI_Controller {
 		parent::__construct();
 		$this->load->model('facilities');
 		//$this->output->enable_profiler(TRUE);
+		
+
+
+		$prefs = array (
+		               'show_next_prev'  => TRUE,
+		               'next_prev_url'   => site_url('facility/get_calendar/')
+		           	);
+		$prefs['template'] = '
+
+			   {table_open}<div>{/table_open}
+
+			   {heading_row_start}<div class="heading">{/heading_row_start}
+
+			   {heading_previous_cell}<button id="calendar-previous" style="display:inline;" class="btn btn-mini" href="{previous_url}">&lt;</button>{/heading_previous_cell}
+			   {heading_title_cell}<span class="title">{heading}</span>{/heading_title_cell}
+			   {heading_next_cell}<button class="btn btn-mini" style="display:inline;" id="calendar-next" href="{next_url}">&gt;</button>{/heading_next_cell}
+
+			   {heading_row_end}</div><table>{/heading_row_end}
+
+			   {week_row_start}<tr>{/week_row_start}
+			   {week_day_cell}<td>{week_day}</td>{/week_day_cell}
+			   {week_row_end}</tr>{/week_row_end}
+
+			   {cal_row_start}<tr>{/cal_row_start}
+			   {cal_cell_start}<td>{/cal_cell_start}
+
+			   {cal_cell_content}<a href="{content}">{day}</a>{/cal_cell_content}
+			   {cal_cell_content_today}<div class="highlight"><a href="{content}">{day}</a></div>{/cal_cell_content_today}
+
+			   {cal_cell_no_content}{day}{/cal_cell_no_content}
+			   {cal_cell_no_content_today}<div class="highlight">{day}</div>{/cal_cell_no_content_today}
+
+			   {cal_cell_blank}&nbsp;{/cal_cell_blank}
+
+			   {cal_cell_end}</td>{/cal_cell_end}
+			   {cal_row_end}</tr>{/cal_row_end}
+
+			   {table_close}</table></div>{/table_close}
+			';
+
+
+		$this->load->library('calendar', $prefs);
+		
 	}
 	
 	function signup()
@@ -92,7 +135,25 @@ class Facility extends CI_Controller {
 		
 	}
 	
-	function calendar($year=null, $month=null)
+	function calendar($facility_id, $year=null, $month=null)
+	{
+		if(!isset($year)){
+			$year = date('Y',strtotime('now'));
+		}
+		if(!isset($month)){
+			$month = date('m',strtotime('now'));
+		}
+		$data['title'] = 'Calendar';
+		$data["month"] = $month;
+		$data["year"] = $year;
+		$data["facility_id"] = $facility_id;
+		//$data['time_table'] = $this->get_time_calendar(2);
+		$this->load->view('templates/header', $data);
+		$this->load->view('facility/calendar', $data);
+		$this->load->view('templates/footer');
+	}
+	
+	function get_calendar($year=null, $month=null)
 	{
 		if(!isset($year)){
 			$year = date('Y',strtotime('now'));
@@ -101,54 +162,13 @@ class Facility extends CI_Controller {
 			$month = date('m',strtotime('now'));
 		}
 		
-		$prefs = array (
-		               'show_next_prev'  => TRUE,
-		               'next_prev_url'   => site_url('facility/calendar')
-		           	);
-		$prefs['template'] = '
-
-		   {table_open}<table border="0" cellpadding="4" cellspacing="4">{/table_open}
-
-		   {heading_row_start}<tr>{/heading_row_start}
-
-		   {heading_previous_cell}<th><a id="calendar-previous" href="{previous_url}">&lt;&lt;</a></th>{/heading_previous_cell}
-		   {heading_title_cell}<th colspan="{colspan}">{heading}</th>{/heading_title_cell}
-		   {heading_next_cell}<th><a id="calendar-next" href="{next_url}">&gt;&gt;</a></th>{/heading_next_cell}
-
-		   {heading_row_end}</tr>{/heading_row_end}
-
-		   {week_row_start}<tr>{/week_row_start}
-		   {week_day_cell}<td>{week_day}</td>{/week_day_cell}
-		   {week_row_end}</tr>{/week_row_end}
-
-		   {cal_row_start}<tr>{/cal_row_start}
-		   {cal_cell_start}<td>{/cal_cell_start}
-
-		   {cal_cell_content}<a href="{content}">{day}</a>{/cal_cell_content}
-		   {cal_cell_content_today}<div class="highlight"><a href="{content}">{day}</a></div>{/cal_cell_content_today}
-
-		   {cal_cell_no_content}{day}{/cal_cell_no_content}
-		   {cal_cell_no_content_today}<div class="highlight">{day}</div>{/cal_cell_no_content_today}
-
-		   {cal_cell_blank}&nbsp;{/cal_cell_blank}
-
-		   {cal_cell_end}</td>{/cal_cell_end}
-		   {cal_row_end}</tr>{/cal_row_end}
-
-		   {table_close}</table>{/table_close}
-		';
-		
-		
-		$this->load->library('calendar', $prefs);
-		
-		$data['title'] = 'Calendar';
 		$data["month"] = $month;
 		$data["year"] = $year;
-		//$data['time_table'] = $this->get_time_calendar(2);
-		$this->load->view('templates/header', $data);
-		$this->load->view('facility/calendar', $data);
-		$this->load->view('templates/footer');
+		$data["calendar"] = $this->calendar->generate($year, $month);
+		
+		echo json_encode($data);
 	}
+	
 	
 	function get_time_calendar($facility_id)
 	{
