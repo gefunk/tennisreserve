@@ -4,26 +4,37 @@
     display: inline-block;
 }
 
+
+
 #reservations tr > td {
     cursor: pointer;
     min-width: 200px;
     width: 200px;
-    border: 1px solid #DDD;
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
     min-height: 30px;
     height: 30px;
     max-height: 30px;
-    background-color: #F3EFE0;
 }
 
+table tr:nth-child(odd) > td {
+    border-top: 1px solid #DDD;
+
+}
+
+table tr:nth-child(even) > td {
+    border-top: 1px dotted #DDD;
+
+}
 
 #timings {
     position: absolute;
     text-align: right;
     background-color: #FFF;
-    border-right: 1px solid #3399FF;
+    border-right: 1px solid #DDD;
     display: inline-block;
-    z-index: 1;
-    color: #217C7E;
+    z-index: 2;
+    color: #787878;
     
 }
 
@@ -33,8 +44,6 @@
 }
 
 #timings tr > td{
-    border-top: 1px solid #3399FF;
-    border-bottom: 1px solid #3399FF;
     min-height: 30px;
     height: 30px;
     max-height: 30px;
@@ -45,7 +54,7 @@
     position: absolute;
     background-color: #FFF;
     border-bottom: 1px solid #DDDDDD;
-    z-index: 1;
+    z-index: 3;
 }
 
 #heading th{
@@ -62,7 +71,7 @@
     padding: 5px;
     display: inline;
     opacity: 0.75;
-    z-index: 1000;
+    z-index: 1;
     width: 188px;
 }
 
@@ -110,4 +119,13 @@
     background-repeat: repeat-x;
     color: #FFFFFF;
     cursor: pointer;
+}
+
+#update_info{
+    position:fixed;
+    top: 45px;
+    left: 10px;
+    width: 200px;
+    z-index: 5;
+    display: none;
 }

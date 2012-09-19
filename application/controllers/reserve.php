@@ -73,9 +73,42 @@ class Reserve extends CI_Controller {
 		echo $id." End Time: ".$end_time. "Court ID". $court_id. " Int Length ".intval($court_id);
 	}
 	
-	function get_reservations($facility_id, $date)
+	function get($facility_id, $date, $timestamp=null)
 	{
-		echo json_encode($this->reservations->get_reservations_for_date($facility_id, $date));
+		$reservations = $this->reservations->get_reservations_for_date($facility_id, $date, str_replace('_',' ',$timestamp));
+		$result = array();
+		foreach($reservations as $reservation){
+			$result[$reservation->id] = array(
+				'court_id' => $reservation->court_id,
+				'start_time' => $this->format_time($reservation->start_time),
+				'end_time' => $this->format_time($reservation->end_time)
+				);
+		}
+		echo json_encode(
+			array(
+					"reservations" => $result, 
+					"timestamp" => date("Y-m-d_H:i:s", strtotime('now'))
+				)
+			);
+	}
+	
+	function load($facility_id, $date)
+	{
+		$timestamp = date("Y-m-d H:i:s", strtotime('-30 min'));
+		$result = $this->reservations->get_reservations_for_date($facility_id, $date, $timestamp);
+		
+		foreach($result as $row){
+			echo $row->id;
+		}
+	}
+	
+	/**
+		format time string for UI
+		will cut off seconds and replace ':' with '_'
+	**/
+	function format_time($time)
+	{
+		return str_replace(':', '_', substr($time, 0, -3));
 	}
 
 

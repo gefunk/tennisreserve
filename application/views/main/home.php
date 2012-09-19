@@ -1,26 +1,40 @@
+<link href="<?php echo base_url();?>assets/css/home.css" rel="stylesheet">
 <!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit">
-  <h1>Tennis Reservations</h1>
-  <p>Blabbity, blabbity, blabbity, blah. Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.Blabbity, blabbity, blabbity, blah.</p>
-  <p><a class="btn btn-primary btn-large" href="<?php echo site_url('facility/signup'); ?>">Sign Up, MF!&raquo;</a></p>
+<div class="home hero-unit">
+	<h1>Manage your Courts</h1>  
+	<h4>easily ,efficiently, elegantly</h4>
 </div>
 
 <!-- Example row of columns -->
 <div class="row">
-  <div class="span4">
-    <h2>Heading</h2>
-    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-    <p><a class="btn" href="#">View details &raquo;</a></p>
+  <div class="span6">
+    <h4>View Reservations for all Courts</h4>
+    <p>Remove pages of calendar clutter from your desk. Keep all reservations safe and secure - accessible online, anytime, anywhere</p>
+    
   </div>
-  <div class="span4">
-    <h2>Heading</h2>
-    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-    <p><a class="btn" href="#">View details &raquo;</a></p>
+  <div class="span6">
+    <h4>Improve Efficiency</h4>
+    <p>Minimize time spent on the phone, Allow users to view court calendar and requests reservations. Save time and money by being more organized</p>
  </div>
-  <div class="span4">
-    <h2>Heading</h2>
-    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-    <p><a class="btn" href="#">View details &raquo;</a></p>
-  </div>
+</div>
+<div class="row">
+	<div class="span6">
+    	<h4>Reduce Errors</h4>
+	    <p>Remove any doubt that a court has been booked. A user can log on online and check their reservation immediately</p>
+  	</div>	
+	<div class="span6">
+    	<h4>No Infrastructure</h4>
+	    <p>We host everything! Our servers are reliable, redundant and 100% secure. You don't have to own any hardware!</p>
+  	</div>
+</div>
+<div class="row">
+	<div class="span6">
+    	<h4>Get your own Domain</h4>
+	    <p>Users can access your courts at yourdomain.savecourt.com, When you sign up you will have your own space at savecourt.com</p>
+  	</div>	
+	<div class="span6">
+    	<h4>Advertise with us!</h4>
+	    <p>Get more people to buy merchandise at your pro shop or stores. Also advertise your services on our site!</p>
+  	</div>
 </div>
 

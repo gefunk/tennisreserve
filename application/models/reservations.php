@@ -42,7 +42,7 @@ class Reservations extends CI_Model {
 	/**
 		given a date, return all the reservations for this date
 	**/
-	function get_reservations_for_date($facility_id, $date){
+	function get_reservations_for_date($facility_id, $date, $timestamp=null){
 		// get the id of all the courts for this facility
 		$this->db->select("id");
 		$this->db->from("courts");
@@ -57,6 +57,9 @@ class Reservations extends CI_Model {
 		
 		$this->db->where('date', $date); 
 		$this->db->where_in('court_id', $court_ids);  
+		if(isset($timestamp)){
+			$this->db->where('last_update >',$timestamp);
+		}
 		$query = $this->db->get('reservations');
 		return $query->result();
 	}

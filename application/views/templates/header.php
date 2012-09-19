@@ -43,7 +43,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="<?php echo site_url('home');?>">Tennis Reservations</a>
+          <a class="brand" href="<?php echo site_url('home');?>">Save Court</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="<?php echo site_url('home');?>">Home</a></li>

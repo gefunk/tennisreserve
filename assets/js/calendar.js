@@ -16,20 +16,12 @@ weekday[4]="Thursday";
 weekday[5]="Friday";
 weekday[6]="Saturday";
 
+var court_col_positions = new Array();
+var time_row_positions = new Array();
+
+var last_update_timestamp;
 
 
-/* 
-set global options for the draggable event
-reset draggable revert to invalid when dragging stops
-we do this because we set revert to true
-when the booking div doesn't find anything to drop on
-*/
-var draggable_options = {
-    revert: 'invalid',
-    stop: function(){
-            $(this).draggable('option','revert','invalid');
-        }
-};
 /**
 	get the month calendar on page load
 	and set the Month and Day on the calendar title element
@@ -53,6 +45,28 @@ function initialize_time_table (time_table_url, res_url) {
     		    .droppable({
     		        drop: handle_drop
     		    });
+  		    
+  		    // initialize positions of courts and timings
+  		    $("#reservations > table > tbody > tr:first > td").each(function(index, value){
+                court_col_positions.push(
+                    { 
+                        offset: $(this).offset().left, 
+                        id: $(this).attr('court-id')
+                    }
+                );
+  		    });
+  		    $("#reservations > table > tbody > tr").each(function(index, value){
+  		        var row_id = this.id;
+  		        $(this).children('td:first').each(function(){
+  		           time_row_positions.push(
+  		               {
+  		                   offset: $(this).offset().top, 
+  		                   id: row_id
+  		               }
+  		            );
+  		        });
+                
+  		    });
   		
     		// call display reservations after we get the calendar from the backend
     		display_reservations(res_url, selected_year+'-'+parseInt(selected_month+1)+'-'+selected_day, null);
@@ -114,48 +128,38 @@ function make_new_reservation ($cell, url, facility_id) {
 	);
 	
 }
-
+/** displays reservations on page load **/
 function display_reservations(display_reservations_url, date, $reservations_table){
 	$.get(
 		display_reservations_url+"/"+date,
 		function(data){
-			for(var key in data){
-				if(data.hasOwnProperty(key)){
-					var start_time = data[key].start_time;
-					var end_time = data[key].end_time;
-					var court_id = data[key].court_id;
-					var $start_column = $("tr#"+start_time+" > td[court-id='"+court_id+"']");
-					var $end_column = $("tr#"+end_time+" > td[court-id='"+court_id+"']");
-					if(!$end_column.length){
-					    $end_column = $($start_column.closest('tr').next().children().eq($start_column.index()));
-					}
-					
-					var top =  ($start_column.position().top);
-					var left = ($start_column.position().left);
-                    var height_of_div = calculate_height_div($start_column, $end_column);
-					var width = width_of_cell;
-					var div_html = '<div id="'+key+'" '+ 
-    			    'class="booking" '+ 
-    			    'rel="popover" '+
-    			    'style="position:absolute;top:'+top+'px;left:'+left+'px;height:'+height_of_div+'px;">'+
-    			    'New Reservation'+
-    			    '</div>';
-					$(div_html)
-					    .resizable(get_resizable_options(width))
-					    .draggable(draggable_options)
-					    .appendTo("#reservations");
-				}
+			for(var key in data.reservations){
+				if(data.reservations.hasOwnProperty(key)){
+					put_reservation_on_calendar (
+					    key,
+					    data.reservations[key].start_time, 
+					    data.reservations[key].end_time, 
+					    data.reservations[key].court_id
+					);
+				}	
 			}
-			// if we are asked to animate the fade in
-			if($reservations_table && $reservations_table.length){
-			    $reservations_table.fadeIn();
-			}
-			
+			// save timestamp, we use this to check changes periodically
+			last_update_timestamp = data.timestamp;
+			// start the clock on updating the calendar
+			setTimeout(check_update_reservation, 5000);
 		},
 		"json"
 		);
 }
 
+
+
+
+/**
+    reservation event handlers
+**/
+
+/** handles when a user moves a reservation around on the calendar **/
 function handle_drop (event, ui) {
     /* 
         figure out which column the user intended to put the reservation
@@ -163,17 +167,16 @@ function handle_drop (event, ui) {
     */    
     var $element = $(ui.helper);
     // get the closest cell
-    var $top_cell = find_closest_cell($element)
+    var time = find_closest(time_row_positions, $element.offset().top);
+    var court = find_closest(court_col_positions, $element.offset().left);
+    console.log("Found this ", $("#reservations > table > tbody > tr#"+time+" > td[court-id="+court+"]"));
+    $top_cell = $("#reservations > table > tbody > tr#"+time+" > td[court-id="+court+"]");
     
     if($top_cell && $top_cell.length){
         // get the end time cell
-        var bottom_cell = document.elementFromPoint($top_cell.absoluteLeft(), $top_cell.absoluteTop()+$element.height()+20);
-        console.log(
-            "Looked here left", $top_cell.absoluteLeft(),
-            "top", $top_cell.absoluteTop()+$element.height()+20,
-            "On drag got this bottom cell", bottom_cell);
-        $bottom_cell = $(bottom_cell); //.closest('tr').next().children().eq($(bottom_cell).index());
-        
+        var bottom_time = find_closest(time_row_positions, $top_cell.offset().top+$element.height());
+        var $bottom_cell = $("#reservations > table > tbody > tr#"+bottom_time+" > td[court-id="+court+"]");
+        console.log("On drag got this bottom cell", $bottom_cell);
         var go_left = $top_cell.position().left+1;
         var go_top = $top_cell.position().top;
         console.log("Should be going Left", go_left, "Top", go_top);
@@ -181,7 +184,6 @@ function handle_drop (event, ui) {
             left: go_left,
             top: go_top
         },function(){
-
             change_reservation($element.attr('id'), $top_cell.attr("court-id"), $top_cell.parent().attr('id'), $bottom_cell.parent().attr('id'));
         });
         
@@ -190,6 +192,7 @@ function handle_drop (event, ui) {
         // revert to original position
         ui.draggable.draggable('option','revert',true);
     }
+    
 }
 
 
@@ -197,21 +200,23 @@ function handle_drop (event, ui) {
     resize of reservation div
 **/
 function handle_resize(event, ui){
-    var $div = $(ui.helper);
-	var bottom_cell = get_bottom_cell($div);
-    if(bottom_cell && bottom_cell.nodeName.toLowerCase() == 'td'){
+    var $element = $(ui.helper);
+    var bottom_time = find_closest(time_row_positions, $element.offset().top+$element.height());
+    var court = find_closest(court_col_positions, $element.offset().left);
+	var $bottom_cell = $("#reservations > table > tbody > tr#"+bottom_time+" > td[court-id="+court+"]");
+    if($bottom_cell && $bottom_cell.length){
         // get the cell below the bottom cell
-        bottom_cell = $(bottom_cell).closest('tr').next().children().eq($(bottom_cell).index());
+        $bottom_cell = $bottom_cell.closest('tr').next().children().eq($bottom_cell.index());
         
         // save the reservation information into the database, async
-    	change_reservation($(ui.helper).attr("id"), null, null, $(bottom_cell).parent().attr('id')); 
+    	change_reservation($(ui.helper).attr("id"), null, null, $bottom_cell.parent().attr('id')); 
         
         /**
             get the height of the div 
             based on the cell below the bottom
             the top of the next cell 
         */
-        var height_of_div = calculate_height_div($div,$(bottom_cell));
+        var height_of_div = calculate_height_div($element,$bottom_cell);
     	$(ui.helper).height(height_of_div);
     }else{
         console.log("Resetting resize");
@@ -219,12 +224,7 @@ function handle_resize(event, ui){
     }	
 }
 
-/**
-    clear reservations from the screen
-**/
-function clear_reservations () {
-    $("div.booking").remove();
-}
+
 
 
 /*
@@ -272,17 +272,11 @@ function attach_scroll_handler () {
     helper functions
 **/
 
-// get the cell which is at the bottom of the booking div 
-function get_bottom_cell ($div) {
-    var left = $div.absoluteLeft()+$div.width()+4;
-    var top = $div.absoluteTop()+$div.outerHeight(true)+4;
-    console.log("Bottom of Div", $div.css('bottom'));
-	var element = document.elementFromPoint(left,top);
-    console.log("Looking for bottom cell here left:",left,"Top", top, "Found", element);
-	if(element && element.nodeName.toLowerCase() == 'td'){
-	    return element;
-	}
-	return null;
+/**
+    clear reservations from the screen
+**/
+function clear_reservations () {
+    $("div.booking").remove();
 }
 
 // calculate the height of the booking div based on the start col and end col
@@ -293,67 +287,92 @@ function calculate_height_div($start_td, $end_td){
 }
 
 /**
-    find the cell where the draggable object
-    should go
+    graphically adds a reservation to the calendar
 **/
-function find_closest_cell ($element) {
-    // cell we will tell the draggable to go to
-    var $cell = null;
-    
-    var element_width = $element.width();
-    var top = $element.absoluteTop();
-    var left = $element.absoluteLeft();
-    var middle_of_element = left + (element_width/2);
-    // element to the top and left of the div
-    var element_top_left = document.elementFromPoint(left - 3,top - 2);
-    // element to the top and right of the div
-    var element_top_right = document.elementFromPoint(left+element_width + 3,top - 2);
-
-    /*
-    console.log("top", top,
-    "left", left,
-    "Top Left Element", element_top_left,
-    "Top Right Element", element_top_right);
-    */
-    
-    var top_left_is_td = false;
-    // check top left element is td
-    if(element_top_left && element_top_left.nodeName.toLowerCase() == 'td'){
-        top_left_is_td = true;
-        $cell = $(element_top_left);
-    }
-    
-    var top_right_is_td = false;
-    if(element_top_right && element_top_right.nodeName.toLowerCase() == 'td'){
-        top_right_is_td = true;
-    }
-    
-
-    // based on the div is dropped halfway on the right cell, check if we should go right
-    if(top_left_is_td){
-        // if top right cell is also td, check if we should go there
-        if(top_right_is_td){
-            var top_left_cell_right = $(element_top_left).absoluteLeft()+$(element_top_left).width();
-            //console.log("top left cell right", top_left_cell_right, "middle", middle_of_element);
-            if(middle_of_element > top_left_cell_right){
-                //console.log("Going right");
-                $cell = $cell.next();
-            }
-        }
-        // check if draggable elements top is more than halfway down the cell
-        // if it is go to the cell below 
-        /*console.log("Checking to go bottom, Top", top,
-            "Cell middle", $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) );*/
-        if(top > $(element_top_left).absoluteTop() + (($(element_top_left).height()-4)/2) )
-            $cell = $($cell.closest('tr').next().children().eq($cell.index()));
-            
-        
-    }
-    
-    return $cell;
-    
+function put_reservation_on_calendar (reservation_id ,start_time, end_time, court_id) {
+    var $start_column = $("tr#"+start_time+" > td[court-id='"+court_id+"']");
+	var $end_column = $("tr#"+end_time+" > td[court-id='"+court_id+"']");
+	if(!$end_column.length){
+	    $end_column = $($start_column.closest('tr').next().children().eq($start_column.index()));
+	}
+	
+	var top =  ($start_column.position().top);
+	var left = ($start_column.position().left);
+    var height_of_div = calculate_height_div($start_column, $end_column);
+	var width = width_of_cell;
+	var div_html = '<div id="'+reservation_id+'" '+ 
+    'class="booking" '+ 
+    'rel="popover" '+
+    'style="position:absolute;top:'+top+'px;left:'+left+'px;height:'+height_of_div+'px;">'+
+    'New Reservation'+
+    '</div>';
+	$(div_html)
+	    .resizable(get_resizable_options(width))
+	    .draggable(draggable_options)
+	    .appendTo("#reservations");
 }
 
+
+/**
+    linear search for the closest number in a list
+**/
+function find_closest(list, search_value){
+    var last_value = null;
+    var result = null;
+    /*console.log("Search Value", search_value, 
+    "Last value in list", list[list.length-1], 
+    "Length", list.length);*/
+    // check if search_value < 0
+    if(search_value < 0){
+        result = list[0].id;
+    }
+    // search value greater than list item in list
+    else if(search_value > list[list.length-1].offset){
+        //console.log("Should be returning hte last value in the list");
+        result = list[list.length-1].id;
+    }else{
+        // search through list
+        for(var index=0; index < list.length; index++){
+            var item = list[index];
+            if(search_value == item.offset){
+                result = item.id;
+                break;
+            }else if(last_value && 
+                (search_value > item.offset && search_value < last_value.offset)
+                || (search_value < item.offset && search_value > last_value.offset)){
+                    /*console.log("checking absolute value, Item",Math.abs(search_value - item.offset),
+                    "Last Value abs",  Math.abs(search_value - last_value.offset),
+                    "Last VAlue", last_value);*/
+                    // we are in between 2 values in the array
+                    if(Math.abs(search_value - item.offset) > Math.abs(search_value - last_value.offset))
+                        result = last_value.id;
+                    else
+                        result = item.id;
+                    break;
+            }
+            last_value = item;
+        }
+    }
+    
+    return result;
+}
+
+/* 
+set global options for the draggable event
+reset draggable revert to invalid when dragging stops
+we do this because we set revert to true
+when the booking div doesn't find anything to drop on
+*/
+var draggable_options = {
+    revert: 'invalid',
+    stop: function(){
+            $(this).draggable('option','revert','invalid');
+        }
+};
+
+/*
+    resizable options, global to all reservation divs
+*/
 function get_resizable_options (width) {
     return { 
     	maxWidth: width,
