@@ -5,12 +5,19 @@ class Main extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
-	
+		$this->load->helper('url');
 	}
 	
 	function index($page='')
 	{
-				
+		$current_url = current_url();
+		$no_http = substr($current_url, strpos($current_url, '://')+3);
+		$sub_url = substr($no_http,0,strpos($no_http, '.'));
+		if(!strpos($sub_url, '/')){
+			echo $sub_url;
+		}else{
+			echo "FALSE";
+		}
 	}
 	
 	public function view($page = 'home')

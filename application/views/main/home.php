@@ -2,7 +2,7 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="home hero-unit">
 	<h1>Manage your Courts</h1>  
-	<h4>easily ,efficiently, elegantly</h4>
+	<small>easily ,efficiently, elegantly</small>
 </div>
 
 <!-- Example row of columns -->

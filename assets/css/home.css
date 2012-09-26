@@ -1,8 +1,7 @@
 body{
-    background-image: url('../../assets/img/tennis_title.png');
-    background-position: 0% 80px;
-
-    background-repeat:no-repeat;
+    background-image: url('../../assets/img/tennis_title.png'), url('../../assets/img/right-repeat-title.png');
+    background-position: left 100px;
+    background-repeat: no-repeat, repeat-x;
 }
 
 .home{
@@ -11,14 +10,18 @@ body{
     background-repeat: no-repeat;
     background-position: right bottom;
     height: 400px;
-    margin-right: -80px;
 }
 
 .home h1 {
-    margin-top: 10px;
+    margin-top: 180px;
     color: white;
+    font-size: 52px;
+    font-weight: bold;
+    width: 50%;
 }
-.home h4 {
-    margin-top: 20px;
+.home small {
+    line-height: 2;
     color: white;
+    font-size: 22px;
+    width: 50%;
 }
