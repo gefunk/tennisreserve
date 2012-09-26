@@ -12,6 +12,20 @@ class Facilities extends CI_Model {
 		# code...
 	}
 	
+	// based on a subdomain pull up the facility
+	function get_facility_subdomain($url)
+	{
+		$this->db->select('id');
+		$this->db->from('facilities');
+		$this->db->where("save_court_url",$url);  
+		$query = $this->db->get();
+		if($query->num_rows() > 0){
+			$row = $query->row();
+			return $row->id;
+		}else
+			return null;
+	}
+	
 	function get_facility($id)
 	{
 		$query = $this->db->get_where('facilities', "id = $id");  

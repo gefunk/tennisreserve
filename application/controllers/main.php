@@ -6,12 +6,23 @@ class Main extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->model('facilities');
 	}
 	
 	function index($page='')
 	{
 		$subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST'])); 
-		echo $subdomain;
+		if($subdomain && $subdomain != '' && $subdomain != 'www'){
+			$facility_id = $this->facilities->get_facility_subdomain($subdomain);
+			if($facility_id != null){
+				// forward to facility page
+				echo $facility_id;
+			}else{
+				$this->view('home');
+			}
+		}else{
+			view('home');
+		}
 	}
 	
 	public function view($page = 'home')
