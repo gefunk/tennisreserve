@@ -18,10 +18,10 @@ class Main extends CI_Controller {
 				// forward to facility page
 				echo $facility_id;
 			}else{
-				view($page);
+				$this->view($page);
 			}
 		}else{
-			view($page);
+			$this->view($page);
 		}
 	}
 	
