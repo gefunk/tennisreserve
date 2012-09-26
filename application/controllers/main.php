@@ -9,7 +9,7 @@ class Main extends CI_Controller {
 		$this->load->model('facilities');
 	}
 	
-	function index($page='')
+	function index($page='home')
 	{
 		$subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST'])); 
 		if($subdomain && $subdomain != '' && $subdomain != 'www'){
@@ -18,10 +18,10 @@ class Main extends CI_Controller {
 				// forward to facility page
 				echo $facility_id;
 			}else{
-				$this->view('home');
+				view($page);
 			}
 		}else{
-			view('home');
+			view($page);
 		}
 	}
 	
