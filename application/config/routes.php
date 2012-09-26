@@ -38,14 +38,13 @@
 |
 */
 
-$route['default_controller'] = "main/view";
+$route['default_controller'] = "main/index";
 // $route['404_override'] = '';
 $route['home'] = "main/view";
 $route['contact'] = "main/view/contact";
 $route['about'] = "main/view/about";
 $route['terms'] = "main/terms";
 $route['signup'] = "main/signup";
-$route['confirm/(:any)'] = "navi/confirm";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
