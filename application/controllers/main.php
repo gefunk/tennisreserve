@@ -10,8 +10,9 @@ class Main extends CI_Controller {
 	
 	function index($page='')
 	{
+		echo $_SERVER["SERVER_NAME"]."<br>";
 		$current_url = current_url();
-		echo $current_url;
+		echo $current_url."<br>";
 		$no_http = substr($current_url, strpos($current_url, '://')+3);
 		$sub_url = substr($no_http,0,strpos($no_http, '.'));
 		if(!strpos($sub_url, '/')){
